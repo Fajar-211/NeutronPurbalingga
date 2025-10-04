@@ -135,7 +135,7 @@
     </table>
 
     <!-- Nilai UTBK -->
-    @if ($siswa->note)
+    @if ($siswa->kelas->category['category'] == 'kelas besar')
         <h2>Hasil Tryout UTBK</h2>
         <table class="table">
             <thead>
@@ -206,19 +206,16 @@
             <tr>
                 <th>Mapel</th>
                 <th>Hadir</th>
-                <th>Absen</th>
             </tr>
         </thead>
         <tbody>
             @php 
-                $rekapHadir = $hadir->groupBy('mapel_id')->map->count(); 
-                $rekapTidak = $tidak->groupBy('mapel_id')->map->count(); 
+                $rekapHadir = $hadir->groupBy('mapel_id')->map->count();
             @endphp
             @foreach ($siswa->mengambil as $mapel)
                 <tr>
                     <td>{{ $mapel->nama_mapel }}</td>
                     <td>{{ $rekapHadir[$mapel->id] ?? 0 }}</td>
-                    <td>{{ $rekapTidak[$mapel->id] ?? 0 }}</td>
                 </tr>
             @endforeach
         </tbody>
@@ -226,13 +223,12 @@
             <tr>
                 <th>Total</th>
                 <td>{{ $hadir->count() }}</td>
-                <td>{{ $tidak->count() }}</td>
             </tr>
         </tfoot>
     </table>
 
     <!-- Catatan -->
-    @if ($siswa->note)
+    @if ($siswa->kelas->category['category'] == 'kelas besar')
         <div class="notes">
             <p class="italic" style="color: red" >Catatan*</p>
             {{ $siswa->note->catatan }}

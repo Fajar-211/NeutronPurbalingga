@@ -142,7 +142,7 @@
     </table>
 
     <!-- Nilai UTBK -->
-    @if ($siswa->note)
+    @if ($siswa->kelas->category['category'] == 'kelas besar')
         <h2>Hasil Tryout UTBK</h2>
         <table class="table">
             <thead>
@@ -241,7 +241,7 @@
     </table>
 
     <!-- Catatan -->
-    @if ($siswa->note)
+    @if ($siswa->kelas->category['category'] == 'kelas besar')
         <div class="notes">
             <p class="italic" style="color: red" >Catatan*</p>
             {{ $siswa->note->catatan }}

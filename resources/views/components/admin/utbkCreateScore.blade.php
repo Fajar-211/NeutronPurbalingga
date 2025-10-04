@@ -31,6 +31,22 @@
               </div>
             </div>
           </div>
+          <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
+            <form class="flex items-center">
+                @csrf
+                <label for="simple-search" class="sr-only">Search</label>
+                <div class="relative w-full">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <input name="cari" type="text" id="simple-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Search name">
+                </div>
+            </form>
+          </div>
+          <div>
+          </div>
           <!-- End Header -->
 
           <!-- Table -->
@@ -57,13 +73,14 @@
                         <td class="h-px w-auto whitespace-nowrap">
                             <div class="px-6 py-2 flex items-center gap-x-3">
                                 <span class="text-sm text-gray-600 dark:text-neutral-400">{{ $loop->iteration }}</span>
-                                <p class="text-sm text-blue-600 decoration-2 hover:underline dark:text-blue-500">{{ $note->siswa->nama }}</p>
+                                <p class="text-sm text-blue-600 decoration-2 hover:underline dark:text-blue-500">{{ $note['nama'] }}</p>
                             </div>
                         </td>
                         @foreach ($utbks as $utbk)
                             <td class="h-px w-auto whitespace-nowrap">
                                 <div class="px-6 py-2">
-                                    <input type="number" name="scores[{{ $note->id }}][{{ $utbk['id'] }}]" value="{{ old('scores.' . $note->id . '.' . $utbk['id']) }}" class="@error('scores.' . $note->id . '.' . $utbk['id']) border-red-600 bg-red-100 @enderror py-2.5 sm:py-3 px-4 block w-full min-w-24 border-gray-200 rounded-lg sm:text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="{{ $note->siswa->nama }} score">
+                                  {{-- old('scores.' . $note->id . '.' . $utbk['id']) -> didalam value --}}
+                                    <input type="number" name="scores[{{ $note->id }}][{{ $utbk['id'] }}]" value="{{ old('scores.' . $note->id . '.' . $utbk->id, $scores[$note->id . '_' . $utbk->id] ?? 0) }}"  class="@error('scores.' . $note->id . '.' . $utbk['id']) border-red-600 bg-red-100 @enderror py-2.5 sm:py-3 px-4 block w-full min-w-24 border-gray-200 rounded-lg sm:text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="{{ $note['nama'] }} score">
                                 @error('scores.' . $note->id . '.' . $utbk['id'])
                                     <div class="mt-2 text-xs text-red-600 dark:text-red-500">{{ $message }}</div>
                                 @enderror
@@ -82,4 +99,22 @@
   </div>
   <!-- End Card -->
 </div>
+@push('ajax')
+<script>
+  const cari = document.getElementById('simple-search');
+  cari.addEventListener('keyup', function(){
+    let filter = cari.value.toLowerCase();
+    let rows = document.querySelectorAll("tbody tr");
+
+    rows.forEach(row => {
+      let nama = row.querySelector("td p").textContent.toLowerCase(); // ambil nama siswa
+      if (nama.includes(filter)) {
+        row.style.display = "";
+      } else {
+        row.style.display = "none";
+      }
+    });
+  });
+</script>
+@endpush
 <!-- End Table Section -->

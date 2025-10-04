@@ -179,12 +179,16 @@
         </tr>
         <tr>
             <td>Asal Sekolah</td>
+            <td>: {{ $siswa['sekolah'] }}</td>
+        </tr>
+        <tr>
+            <td>Kelas</td>
             <td>: {{ $siswa->kelas->kelas }}</td>
         </tr>
     </table>
 
     <!-- Nilai UTBK -->
-    @if ($siswa->note == true)
+    @if ($siswa->kelas->category['category'] === 'kelas besar')
     <h2 class="font-bold mb-2">Hasil Tryout Ujian Tulis Berbasis Komputer</h2>
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
@@ -272,11 +276,11 @@
                         Mapel
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Present
+                        Kehadiran
                     </th>
-                    <th scope="col" class="px-6 py-3 rounded-e-lg">
+                    {{-- <th scope="col" class="px-6 py-3 rounded-e-lg">
                         Absent
-                    </th>
+                    </th> --}}
                 </tr>
             </thead>
             <tbody>
@@ -292,9 +296,9 @@
                         <td class="px-6 py-1">
                             {{ $rekapHadir[$mapel['id']] ?? 0 }}
                         </td>
-                        <td class="px-6 py-1">
+                        {{-- <td class="px-6 py-1">
                             {{ $rekapTidak[$mapel['id']] ?? 0 }}
-                        </td>
+                        </td> --}}
                     </tr>
                 @endforeach
             </tbody>
@@ -302,7 +306,7 @@
                 <tr class="font-semibold text-gray-900 dark:text-white">
                     <th scope="row" class="px-6 py-3 text-base">Total</th>
                     <td class="px-6 py-3">{{ $hadir->count() }}</td>
-                    <td class="px-6 py-3">{{ $tidak->count() }}</td>
+                    {{-- <td class="px-6 py-3">{{ $tidak->count() }}</td> --}}
                 </tr>
             </tfoot>
         </table>
@@ -312,9 +316,7 @@
     <div class="mt-4">
         <p class="font-bold">Catatan</p>
         <p class="italic text-gray-600">
-            @foreach ($siswa->nilai as $catatans)
-                {{ $catatans['catatan'] }} <br>
-            @endforeach
+            {{ $siswa->note['catatan'] }}
         </p>
     </div>
 

@@ -45,6 +45,11 @@
                     Nis
                   </span>
                 </th>
+                <th scope="col" class="px-6 py-3 text-start">
+                  <span class="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                    Note
+                  </span>
+                </th>
                 @foreach (App\Models\Utbk::get() as $utbk)
                 <th scope="col" class="px-6 py-3 text-start">
                   <span class="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
@@ -52,12 +57,6 @@
                   </span>
                 </th>
                 @endforeach
-
-                <th scope="col" class="px-6 py-3 text-start">
-                  <span class="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                    Note
-                  </span>
-                </th>
               </tr>
             </thead>
 
@@ -75,13 +74,6 @@
                         <span class="font-semibold text-sm text-gray-800 dark:text-neutral-200">{{ $siswa['nis'] }}</span>
                         </div>
                     </td>
-                    @foreach ($siswa->note->score as $nilai)
-                    <td class="h-px w-auto whitespace-nowrap">
-                        <div class="px-6 py-2">
-                        <span class="text-sm text-gray-800 dark:text-neutral-200">{{ $nilai['score'] }}</span>
-                        </div>
-                    </td>
-                    @endforeach
                     <td class="h-px w-auto whitespace-nowrap min-w-[200px] sm:w-72">
                         <div class="px-6 py-3">
                             <textarea name="catatan[{{ $siswa['id'] }}]"
@@ -95,6 +87,13 @@
                               @enderror
                         </div>
                     </td>
+                    @foreach ($siswa->note->score as $nilai)
+                    <td class="h-px w-auto whitespace-nowrap">
+                        <div class="px-6 py-2">
+                        <span class="text-sm text-gray-800 dark:text-neutral-200">{{ $nilai['score'] }}</span>
+                        </div>
+                    </td>
+                    @endforeach
                 </tr>
                 @endforeach
             </tbody>

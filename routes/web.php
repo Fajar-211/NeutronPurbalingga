@@ -92,6 +92,7 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::post('/utbk/score', [UtbkController::class, 'storescore']);
     Route::get('/utbk/{utbk:utbk}/edit', [UtbkController::class, 'edit']);
     Route::patch('/utbk/{utbk:utbk}', [UtbkController::class, 'update']);
+    Route::patch('/utbkscore/{siswa:slug}', [UtbkController::class, 'editscore']);
 
     Route::get('/absensi', [DropabsentController::class, 'index'])->name('absensi');
     Route::delete('/absensi/delete', [DropabsentController::class, 'Drop']);
@@ -102,6 +103,7 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::delete('/nilai/delete', [DropnilaiController::class, 'Drop']);
     Route::get('/nilai/{nilai:id}/edit', [DropnilaiController::class, 'edit']);
     Route::patch('/nilai/{nilai:id}', [DropnilaiController::class, 'update']);
+    Route::delete('/nilai/{nilai:id}', [DropnilaiController::class, 'destroy']);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

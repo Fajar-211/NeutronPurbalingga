@@ -39,7 +39,7 @@ class SiswaController extends Controller
             'tidak' => $tidak,
         ])->setPaper('A4', 'portrait');
 
-        return $pdf->stream("rapor_{$siswa->id}.pdf");
+        return $pdf->stream("rapor_{$siswa->nama}.pdf");
     }
 
     /**

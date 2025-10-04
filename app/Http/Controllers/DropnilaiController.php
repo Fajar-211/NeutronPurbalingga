@@ -68,8 +68,9 @@ class DropnilaiController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Nilai $nilai)
     {
-        //
+        $nilai->delete();
+        return redirect('nilai')->with(['berhasil' => 'Nilai berhasil dihapus']);
     }
 }

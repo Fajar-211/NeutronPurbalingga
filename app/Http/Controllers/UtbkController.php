@@ -21,16 +21,16 @@ class UtbkController extends Controller
     public function index()
     {
         $utbk = Utbk::query()->get();
-        // $siswas = Siswa::whereHas('kelas.category', function(Builder $query){
-        //     $query->where('category', '=', 'kelas besar');
-        // })->get();
-        $siswas = Note::query()->paginate(20)->withQueryString();
+        $siswas = Siswa::whereHas('kelas', function($query) {
+        $query->whereHas('category', function($q) {
+            $q->where('category', '=', 'kelas besar');
+        });
+    });
+        // $siswas = Note::query()->paginate(20)->withQueryString();
         if(request('cari')){
-            $siswas = Note::whereHas('siswa', function (Builder $query) {
-    $query->where('nama', 'like', request('cari'));
-})->paginate(20)->withQueryString();
+            $siswas->where('nama', 'like', '%' . request('cari') . '%');
         }
-        return view('utbk', ['utbks' =>  $utbk, 'siswas' => $siswas]);
+        return view('utbk', ['utbks' =>  $utbk, 'siswas' => $siswas->paginate(20)->withQueryString()]);
     }
 
     /**
@@ -44,8 +44,14 @@ class UtbkController extends Controller
     public function createScore()
     {
         $utbks = Utbk::query()->get();
-        $notes = Note::query()->get();
-        return view('utbkCreateScore', ['utbks' => $utbks, 'notes' => $notes]);
+        $notes = Siswa::whereHas('kelas.category', function($query) {
+            $query->where('category', 'kelas besar');
+        })->get();
+         $scores = Utbkscore::get()->mapWithKeys(function ($item) {
+        return [$item->peserta_id . '_' . $item->utbk_id => $item->score];
+    });
+        // $notes = Note::get();
+        return view('utbkCreateScore', ['utbks' => $utbks, 'notes' => $notes, 'scores' => $scores]);
     }
 
     /**
@@ -68,19 +74,25 @@ class UtbkController extends Controller
     public function storescore(Request $request)
     {
         Validator::make($request->all(), [
-            'scores.*.*' => 'required|numeric'
+            'scores.*.*' => 'numeric'
         ], [
-            'required' => 'nilai wajib diisi',
+            // 'required' => 'nilai wajib diisi',
             'numeric' => 'input harus angka'
         ])->validate();
          $scores = $request->input('scores');
+         
         DB::transaction(function () use ($scores) {
         foreach ($scores as $siswaId => $utbkScores) {
             foreach ($utbkScores as $utbkId => $score) {
+                $note = Note::where('siswa_id', $siswaId)->first(); 
+                if (!$note) {
+                    continue; // kalau siswa belum punya note, skip biar gak error
+                }
                 // update kalau sudah ada, kalau belum insert
                 Utbkscore::updateOrCreate(
                     [
-                        'peserta_id' => $siswaId,   // note_id
+                        // 'peserta_id' => $siswaId,   // note_id
+                        'peserta_id' => $note->id,
                         'utbk_id'    => $utbkId
                     ],
                     [
@@ -88,9 +100,30 @@ class UtbkController extends Controller
                     ]
                 );
             }
-        }
-    });
+        }});
         return redirect('utbk')->with(['berhasil' => 'Nilai UTBK berhasil ditambah']);
+    }
+
+    public function editscore(Request $request, Siswa $siswa){
+        // Ambil catatan
+        $catatan = $request->input('catatan');
+
+        // Loop semua score yang dikirim dari form
+        foreach ($siswa->note->score as $hasil) {
+            $utbkName = $hasil->utbk->utbk;   // contoh: "Matematika"
+            $nilaiBaru = $request->input($utbkName); // ambil nilainya dari form
+
+            if ($nilaiBaru !== null) {
+                $hasil->update([
+                    'score' => $nilaiBaru,
+                ]);
+            }
+        }
+        // Update catatan
+        $siswa->note->update([
+            'catatan' => $catatan
+        ]);
+        return redirect('utbk')->with(['berhasil' => 'Nilai UTBK berhasil diperbarui']);
     }
 
     /**
