@@ -93,6 +93,7 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::get('/utbk/{utbk:utbk}/edit', [UtbkController::class, 'edit']);
     Route::patch('/utbk/{utbk:utbk}', [UtbkController::class, 'update']);
     Route::patch('/utbkscore/{siswa:slug}', [UtbkController::class, 'editscore']);
+    Route::post('/utbkscore/create/{siswa:slug}', [UtbkController::class, 'utbk']);
 
     Route::get('/absensi', [DropabsentController::class, 'index'])->name('absensi');
     Route::delete('/absensi/delete', [DropabsentController::class, 'Drop']);

@@ -104,25 +104,37 @@ class UtbkController extends Controller
         return redirect('utbk')->with(['berhasil' => 'Nilai UTBK berhasil ditambah']);
     }
 
-    public function editscore(Request $request, Siswa $siswa){
-        // Ambil catatan
-        $catatan = $request->input('catatan');
-
-        // Loop semua score yang dikirim dari form
-        foreach ($siswa->note->score as $hasil) {
-            $utbkName = $hasil->utbk->utbk;   // contoh: "Matematika"
-            $nilaiBaru = $request->input($utbkName); // ambil nilainya dari form
-
-            if ($nilaiBaru !== null) {
-                $hasil->update([
-                    'score' => $nilaiBaru,
-                ]);
-            }
-        }
-        // Update catatan
+    public function utbk(Request $request, Siswa $siswa){
+        $arr[] = $request->id;
+        $score[] = $request->utbk;
+        Validator::make($request->all(), [
+            'utbk.*' => 'numeric'
+        ], [
+            // 'required' => 'nilai wajib diisi',
+            'numeric' => 'input harus angka'
+        ])->validate();
         $siswa->note->update([
-            'catatan' => $catatan
+            'catatan' => $request->catatan
         ]);
+        
+        for($i=0; $i<count($score[0]); $i++){
+            $siswa->note->score()->create([
+            'peserta_id' => $siswa['id'],
+            'utbk_id' => $arr[0][$i],
+            'score' => $score[0][$i]
+            ]);
+        }
+        return redirect('utbk')->with(['berhasil' => 'Nilai UTBK berhasil ditambah']);
+    }
+
+    public function editscore(Request $request, Siswa $siswa){
+        $inpu[] = $request->utbk;
+        for($i=0; $i<count($inpu[0]); $i++){
+            Utbkscore::where('peserta_id', '=', $siswa->note->id)
+            ->where('utbk_id', '=', $request->id[$i])->update([
+                'score' => $inpu[0][$i]
+            ]);
+        }
         return redirect('utbk')->with(['berhasil' => 'Nilai UTBK berhasil diperbarui']);
     }
 

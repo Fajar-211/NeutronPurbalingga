@@ -168,6 +168,7 @@
         </div>
         <div class="text-right">
             <p class="font-bold">Purbalingga</p>
+            <p class="">Periode {{ $bulan }} {{ $tahun }}</p>
         </div>
     </div>
 
@@ -313,12 +314,14 @@
     </div>
 
     <!-- Catatan -->
-    <div class="mt-4">
-        <p class="font-bold">Catatan</p>
-        <p class="italic text-gray-600">
-            {{ $siswa->note['catatan'] }}
-        </p>
-    </div>
+    @if ($siswa->note == true)
+        <div class="mt-4">
+            <p class="font-bold">Catatan</p>
+            <p class="italic text-gray-600">
+                {{ $siswa->note['catatan'] }}
+            </p>
+        </div>
+    @endif
 
     <!-- Footer tanda tangan -->
     <div class="flex justify-between mt-12">

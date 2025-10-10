@@ -20,16 +20,6 @@ class ScoreController extends Controller
     public function index()
     {
         $pengajar = Auth::user();
-        // ambil semua siswa yg ada di mapel pengajar
-        // $siswas = $pengajar->mengajar()
-        //             ->with('diambil.kelas')
-        //             ->get()
-        //             ->flatMap->diambil
-        //             ->unique('id');
-        // // ambil kelas unik dari siswa
-        // $kelas = $siswas->map->kelas->unique('id');
-        // $sis = $pengajar->mengajar()->with('diambil')->get();
-
         $kelas = Kelas::whereHas('siswa.mengambil', function ($q) use ($pengajar) {
             $q->whereIn('mapel_id', $pengajar->mengajar->pluck('id'));
         })->get();
@@ -102,11 +92,10 @@ class ScoreController extends Controller
     $siswas = Siswa::where('kelas_id', $kelas_id)
         ->whereHas('mengambil', function ($q) use ($mapel_id) {
             $q->where('mapels.id', $mapel_id); // prefix jelas biar ga ambigu
-        })
-        ->get();
+        });
         $kelas = Kelas::select('kelas')->where('id' ,'=', $kelas_id)->get();
         $mapel = Mapel::where('id', '=', $mapel_id)->get();
-        return view('user.scoreCreate', ['header' => 'Insert score ' , 'siswas' => $siswas, 'kelas' => $kelas, 'mapel' => $mapel]);
+        return view('user.scoreCreate', ['header' => 'Insert score ' , 'siswas' => $siswas->orderBy('nama', 'asc')->paginate(20)->withQueryString(), 'kelas' => $kelas, 'mapel' => $mapel]);
     }
 
     /**
@@ -114,37 +103,22 @@ class ScoreController extends Controller
      */
     public function store(Request $request)
     {
-        $siswa = $request->siswa;
-        $score = $request->score;
-        $note = $request->catatan;
-        // dump($request->all);
-        // dump($siswa);
-        // dump($note);
-        // dump($request->all());
         Validator::make($request->all(),[
+            'score' => 'required|numeric',
             'tanggal' => 'required',
-            'catatan.*' => 'max:200'
+            'catatan' => 'max:200'
         ],[
             'required' => ':attribute wajib dipilih',
             'max' => 'catatan maksimal 200 karakter'
         ])->validate();
-        foreach($request->all as $siswaID){
-            if(isset($siswa[$siswaID])){
-                $nilai = $score[$siswaID];
-                $catatan = $note[$siswaID];
-            }else{
-                $nilai = 0;
-                $catatan = 'Tidak hadir pada tanggal ' . $request->tanggal;
-            }
-            Nilai::create([
-                'siswa_id' => $siswaID,
-                'pengajar_id' => $request->user,
-                'mapel_id' => $request->mata,
-                'nilai' => $nilai,
-                'tanggal' => $request->tanggal,
-                'catatan' => $catatan
-            ]);
-        }
+        Nilai::create([
+            'siswa_id' => $request->siswa,
+            'pengajar_id' => $request->pengajar,
+            'mapel_id' => $request->mapel,
+            'nilai' => $request->score,
+            'tanggal' => $request->tanggal,
+            'catatan' => $request->note
+        ]);
         return redirect('score')->with(['berhasil' => 'Nilai berhasil ditambah']);
     }
 

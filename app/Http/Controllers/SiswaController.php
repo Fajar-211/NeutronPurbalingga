@@ -31,12 +31,16 @@ class SiswaController extends Controller
         $hadir = Absensi::where('siswa_id', $siswa->id)->where('absensi', 'hadir')->get();
 
         $tidak = Absensi::where('siswa_id', $siswa->id)->where('absensi', 'tidak hadir')->get();
-
+        $tanggal = $siswa->absen[3]['tanggal'];
+        $arr = explode('-', $tanggal);
+        $bulan = date('F', mktime(0,0,0, $arr[1], 1));
         // generate PDF pake view
         $pdf = Pdf::loadView('pdf.rapor', [
             'siswa' => $siswa,
             'hadir' => $hadir,
             'tidak' => $tidak,
+            'bulan' => $bulan,
+            'tahun' => $arr[0]
         ])->setPaper('A4', 'portrait');
 
         return $pdf->stream("rapor_{$siswa->nama}.pdf");
@@ -51,7 +55,7 @@ class SiswaController extends Controller
         if(request('cari')){
             $siswa->where('nama', 'like', '%' . request('cari') . '%');
         }
-        return view('siswa', ['siswas' => $siswa->paginate(20)->withQueryString()]);
+        return view('siswa', ['siswas' => $siswa->orderBy('nama', 'asc')->paginate(20)->withQueryString()]);
     }
 
     /**
@@ -104,7 +108,10 @@ class SiswaController extends Controller
     {
         $hadir = Absensi::where('siswa_id', '=', $siswa['id'])->where('absensi', '=', 'hadir')->get();
         $tidak = Absensi::where('siswa_id', '=', $siswa['id'])->where('absensi', '=', 'tidak hadir')->get();
-        return view('siswaShow',['siswa' => $siswa, 'hadir' => $hadir, 'tidak' => $tidak]);
+        $tanggal = $siswa->absen[3]['tanggal'];
+        $arr = explode('-', $tanggal);
+        $bulan = date('F', mktime(0,0,0, $arr[1], 1));
+        return view('siswaShow',['siswa' => $siswa, 'hadir' => $hadir, 'tidak' => $tidak, 'bulan' => $bulan, 'tahun' => $arr[0]]);
     }
 
     /**

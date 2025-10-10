@@ -29,7 +29,7 @@ class UserSiswaController extends Controller
         })->where('nama', '=', request('nama'))->distinct();
         }
         $jml = $siswas->count();
-    return view('user.home', ['header' => 'home', 'pengajar' => Auth::user(), 'mapels' => $pengajar->mengajar()->get(), 'siswas' => $siswas->paginate(15)->withQueryString(), 'jumlah' => $jml]);
+    return view('user.home', ['header' => 'home', 'pengajar' => Auth::user(), 'mapels' => $pengajar->mengajar()->get(), 'siswas' => $siswas->orderBy('nama', 'asc')->paginate(15)->withQueryString(), 'jumlah' => $jml]);
     }
 
     /**

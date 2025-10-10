@@ -76,10 +76,15 @@ class UserprofilController extends Controller
             $path = ($request->file('avatar')->store('img', 'public'));
             $user->update(['avatar' => $path]);
         }
+        if($request->password == null){
+            $pwd = Hash::make('password');
+        }else{
+            $pwd = Hash::make($request->password);
+        }
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => $pwd
         ]);
         return redirect('home')->with(['berhasil' => 'Profile berhasil dirubah']);
     }

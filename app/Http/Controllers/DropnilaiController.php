@@ -12,8 +12,11 @@ class DropnilaiController extends Controller
      */
     public function index()
     {
-        $nilais = Nilai::query()->latest()->paginate(50)->withQueryString();
-        return view('nilai', ['nilais' => $nilais]);
+        $nilais = Nilai::query();
+        if(request('cari')){
+            $nilais->where('pengajar_id');
+        }
+        return view('nilai', ['nilais' => $nilais->latest()->paginate(50)->withQueryString()]);
     }
     public function Drop()
     {

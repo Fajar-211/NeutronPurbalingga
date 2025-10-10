@@ -11,7 +11,7 @@
     @endphp --}}
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <x-admin.siswaShow :siswa='$siswa' :hadir='$hadir' :tidak='$tidak'></x-admin.siswaShow>
+            <x-admin.siswaShow :siswa='$siswa' :hadir='$hadir' :tidak='$tidak' :bulan='$bulan' :tahun='$tahun'></x-admin.siswaShow>
         </div>
     </div>
 </x-app-layout>

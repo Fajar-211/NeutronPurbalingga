@@ -49,8 +49,7 @@ class AbsenController extends Controller
     $siswas = Siswa::where('kelas_id', $kelas_id)
         ->whereHas('mengambil', function ($q) use ($mapel_id) {
             $q->where('mapels.id', $mapel_id); // prefix jelas biar ga ambigu
-        })
-        ->get();
+        })->orderBy('nama', 'asc')->get();
         $kelas = Kelas::select('kelas')->where('id' ,'=', $kelas_id)->get();
         $mapel = Mapel::where('id', '=', $mapel_id)->get();
         return view('user.absentCreate', ['header' => 'Absence from ', 'siswa' => $siswas , 'kelas' => $kelas, 'mapel' => $mapel]);
@@ -68,8 +67,7 @@ class AbsenController extends Controller
                 'diambil as siswa_di_kelas_count' => function ($q) use ($kelas) {
                     $q->where('siswas.kelas_id', $kelas->id);
                 }
-            ])
-            ->get();
+            ])->get();
 
         return view('user.absentshowmapel', [
             'header' => 'Select mapel in class ' . $kelas->kelas,

@@ -116,6 +116,7 @@
             <p>Laporan Hasil Belajar</p>
         </div>
         <div class="location">Purbalingga</div>
+        <div>Periode {{ $bulan }} {{ $tahun }}</div>
     </div>
 
     <!-- Identitas -->

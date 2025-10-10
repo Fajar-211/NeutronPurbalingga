@@ -34,6 +34,7 @@
         </div>
         @stack('ajax')
         @stack('cari')
+        @stack('nilai')
         <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
         <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
         <script src="./node_modules/preline/dist/preline.js"></script>
