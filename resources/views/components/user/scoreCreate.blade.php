@@ -52,19 +52,25 @@
                                 <div id="apple-imac-{{ $siswa['id'] }}-dropdown" class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
                                     <ul class="py-1 text-sm" aria-labelledby="apple-imac-27-dropdown-button">
                                         <li>
-                                            <button id="on" type="button" data-modal-target="updateProductModal-{{ $siswa['id'] }}" data-modal-toggle="updateProductModal-{{ $siswa['id'] }}" class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200">
-                                                <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                    <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
-                                                </svg>
-                                                Insert
-                                            </button>
+                                            <form action="/score/insert/{{ $siswa['slug'] }}" method="GET">
+                                                @csrf
+                                                <input type="hidden" name="mapel" value="{{ $mata }}">
+                                                <input type="hidden" name="nm" value="{{ $nm }}">
+                                                <input type="hidden" name="kelas" value="{{ $kelas }}">
+                                                <button type="submit" class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200">
+                                                    <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                        <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
+                                                    </svg>
+                                                    Insert
+                                                </button>
+                                            </form>
                                         </li>
                                     </ul>
                                 </div>
                             </td>
                             <!-- insert modal -->
-                            <div id="updateProductModal-{{ $siswa['id'] }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                            {{-- <div id="updateProductModal-{{ $siswa['id'] }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                                 <div class="relative p-4 w-full max-w-2xl max-h-full">
                                     <!-- Modal content -->
                                     <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
@@ -110,23 +116,22 @@
                                         </form>
                                     </div>
                                 </div>
-                            </div>
-                            @if ($errors->any())
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // ambil ID siswa yang error (bisa dikirim lewat old input)
-        const siswaId = "{{ old('siswa') }}";
-        if (siswaId) {
-            const modal = document.getElementById(`updateProductModal-${siswaId}`);
-            if (modal) {
-                modal.classList.remove("hidden");
-                modal.classList.add("flex"); // biar modal tampil
-            }
-        }
-    });
-</script>
-@endif
-
+                            </div> --}}
+                            {{-- @if ($errors->any())
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                        // ambil ID siswa yang error (bisa dikirim lewat old input)
+                                        const siswaId = "{{ old('siswa') }}";
+                                        if (siswaId) {
+                                            const modal = document.getElementById(`updateProductModal-${siswaId}`);
+                                            if (modal) {
+                                                modal.classList.remove("hidden");
+                                                modal.classList.add("flex"); // biar modal tampil
+                                            }
+                                        }
+                                    });
+                                </script>
+                            @endif --}}
                         </tr>    
                     @empty
                         <tr class="border-b dark:border-gray-700">

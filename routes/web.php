@@ -33,6 +33,7 @@ Route::middleware(['auth', 'verified', 'is_user'])->group(function(){
     Route::get('/score', [ScoreController::class, 'index']);
     Route::get('/score/create/{kelas}', [ScoreController::class, 'showmapel']);
     Route::get('/score/create', [ScoreController::class, 'create']);
+    Route::get('/score/insert/{siswa:slug}', [ScoreController::class, 'insert']);
     Route::post('/score', [ScoreController::class, 'store']);
     
     Route::patch('/user/{user:slug}', [UserprofilController::class, 'update']);

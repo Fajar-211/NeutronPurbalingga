@@ -97,6 +97,12 @@ class ScoreController extends Controller
         $mapel = Mapel::where('id', '=', $mapel_id)->get();
         return view('user.scoreCreate', ['header' => 'Insert score ' , 'siswas' => $siswas->orderBy('nama', 'asc')->paginate(20)->withQueryString(), 'kelas' => $kelas, 'mapel' => $mapel]);
     }
+    public function insert(Siswa $siswa){
+        $mapel = request('mapel');
+        $nama_mapel = request('nm');
+        $kelas = request('kelas');
+        return view('user.scoreInsert', ['header' => 'Form evaluasi ' . $nama_mapel . ' on class ' . $kelas, 'siswa' => $siswa, 'mapel' => $mapel]);
+    }
 
     /**
      * Store a newly created resource in storage.

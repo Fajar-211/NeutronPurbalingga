@@ -11,5 +11,5 @@
         endforeach;
     @endphp
     <x-slot:header>{{ $header . $m[0] . ' into class ' . $k[0]}}</x-slot:header>
-    <x-user.scoreCreate :siswas='$siswas' :mata='$i[0]' :kelas='$kelas'></x-user.scoreCreate>
+    <x-user.scoreCreate :siswas='$siswas' :mata='$i[0]' :kelas='$k[0]' :nm='$m[0]'></x-user.scoreCreate>
 </x-user-layout>
