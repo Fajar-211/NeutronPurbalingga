@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Mpdf\Mpdf;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class SiswaController extends Controller
 {
@@ -31,19 +32,20 @@ class SiswaController extends Controller
         $hadir = Absensi::where('siswa_id', $siswa->id)->where('absensi', 'hadir')->get();
 
         $tidak = Absensi::where('siswa_id', $siswa->id)->where('absensi', 'tidak hadir')->get();
-        $tanggal = $siswa->absen[3]['tanggal'];
-        $arr = explode('-', $tanggal);
-        $bulan = date('F', mktime(0,0,0, $arr[1], 1));
+        Carbon::setLocale('id');
+        $tanggal = Carbon::now()->translatedFormat('d F Y');
+        $arr = explode(' ', $tanggal);
         // generate PDF pake view
         $pdf = Pdf::loadView('pdf.rapor', [
             'siswa' => $siswa,
             'hadir' => $hadir,
             'tidak' => $tidak,
-            'bulan' => $bulan,
-            'tahun' => $arr[0]
+            'bulan' => $arr[1],
+            'tahun' => $arr[2]
         ])->setPaper('A4', 'portrait');
 
         return $pdf->stream("rapor_{$siswa->nama}.pdf");
+
     }
 
     /**
@@ -108,10 +110,10 @@ class SiswaController extends Controller
     {
         $hadir = Absensi::where('siswa_id', '=', $siswa['id'])->where('absensi', '=', 'hadir')->get();
         $tidak = Absensi::where('siswa_id', '=', $siswa['id'])->where('absensi', '=', 'tidak hadir')->get();
-        $tanggal = $siswa->absen[3]['tanggal'];
-        $arr = explode('-', $tanggal);
-        $bulan = date('F', mktime(0,0,0, $arr[1], 1));
-        return view('siswaShow',['siswa' => $siswa, 'hadir' => $hadir, 'tidak' => $tidak, 'bulan' => $bulan, 'tahun' => $arr[0]]);
+        Carbon::setLocale('id');
+        $tanggal = Carbon::now()->translatedFormat('d F Y');
+        $arr = explode(' ', $tanggal);
+        return view('siswaShow',['siswa' => $siswa, 'hadir' => $hadir, 'tidak' => $tidak, 'bulan' => $arr[1], 'tahun' => $arr[2]]);
     }
 
     /**

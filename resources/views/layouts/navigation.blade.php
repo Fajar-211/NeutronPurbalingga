@@ -30,7 +30,7 @@
                     <x-nav-link :href="route('siswa')" :active="request()->routeIs('siswa')">
                         {{ __('Siswa') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('absensi')" :active="request()->routeIs('absen')">
+                    <x-nav-link :href="route('absensi')" :active="request()->routeIs('absensi')">
                         {{ __('Recap present') }}
                     </x-nav-link>
                     <x-nav-link :href="route('nilai')" :active="request()->routeIs('nilai')">
@@ -106,12 +106,12 @@
             <x-responsive-nav-link :href="route('siswa')" :active="request()->routeIs('siswa')">
                 {{ __('Siswa') }}
             </x-responsive-nav-link>
-            <x-nav-link :href="route('absensi')" :active="request()->routeIs('absensi')">
+            <x-responsive-nav-link :href="route('absensi')" :active="request()->routeIs('absensi')">
                 {{ __('Recap present') }}
-            </x-nav-link>
-            <x-nav-link :href="route('nilai')" :active="request()->routeIs('nilai')">
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('nilai')" :active="request()->routeIs('nilai')">
                 {{ __('Recap score') }}
-            </x-nav-link>
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->

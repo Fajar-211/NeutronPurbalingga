@@ -111,7 +111,7 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/download/all', [SiswaController::class, 'all']);
+    // Route::get('/download/all', [SiswaController::class, 'all']);
     Route::get('/download/{siswa:nis}', [SiswaController::class, 'download']);
 
     Route::patch('/reset/{user:slug}', [ResetPassController::class, 'update']);
